@@ -1,10 +1,12 @@
-import React from 'react';
 import App from './App';
+import React, { useState, useEffect } from 'react';
 
 import Display from './display/display';
 import Dashboard from './dashboard/dashboard';
-import { render, fireEvent, getByTitle } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import "@testing-library/react/cleanup-after-each";
+
+import '@testing-library/jest-dom/extend-expect';
 
 
 it('renders without crashing', () => {
@@ -23,20 +25,22 @@ describe('renders the App Component', () => {
 })
 
 describe('buttons work correctly', () => {
-  const display = render(<Display />);
-  const dashboard = render(<Dashboard />);
-
   test('ball button works', () => {
-    const ballButton = dashboard.getByTitle('ballBtn');
+    const app = render(<App />)
+
+    const ballButton = app.getByTitle('ballBtn');
     fireEvent.click(ballButton);
-    const ballCount = display.getByTitle('balls-count');
-    expect(ballCount).toHaveTextContent('1');
+
+    const ballCount = app.getByTitle('balls-count');
+    expect(ballCount).toHaveTextContent('1 balls out of 4');
   });
 
   test('strike button works', () => {
-    const strikeButton = dashboard.getByTitle('strikeBtn');
+    const app = render(<App />)
+
+    const strikeButton = app.getByTitle('strikeBtn');
     fireEvent.click(strikeButton);
-    const strikeCount = display.getByTitle('strike-count');
-    expect(strikeCount).toHaveTextContent('1');
+    const strikeCount = app.getByTitle('strikes-count');
+    expect(strikeCount).toHaveTextContent('1 strikes out of 3');
   });
 })
